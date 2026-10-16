@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convite para uma liga - Aposto que…</title>
+<link rel="stylesheet" href="../../style.css">
+<style>
+  .code { font: 700 2.4rem/1.2 ui-monospace, Menlo, monospace; letter-spacing: .15em; margin: 1rem 0; }
+  .btn { display: inline-block; padding: .8rem 1.4rem; border-radius: 14px; background: var(--accent); color: #fff; text-decoration: none; font-weight: 700; border: 0; font-size: 1rem; cursor: pointer; }
+  .btn.alt { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); margin-left: .5rem; }
+</style>
+</head>
+<body>
+<main>
+  <nav><a href="../">Suporte</a><a href="../privacy.html">Política de privacidade</a></nav>
+  <h1>Convite para uma liga</h1>
+  <p class="muted">Aposto que… · jogo diário de cultura geral</p>
+
+  <div id="ok" hidden>
+    <p>Alguém convidou-te para uma liga. O teu código é:</p>
+    <div class="code" id="code"></div>
+    <p><a class="btn" id="open" href="#">Abrir na app</a><button class="btn alt" id="copy" type="button">Copiar código</button></p>
+    <p class="muted" id="copied" hidden>Código copiado.</p>
+    <h2>Se o botão não abrir a app</h2>
+    <p>Abre o <strong>Aposto que…</strong>, vai a <strong>Ligas</strong>, escreve o código em <strong>Entrar com um código</strong> e toca em <strong>Entrar</strong>. Precisas de confirmar que tens 13 anos ou mais.</p>
+    <p class="muted">Ainda não tens a app? Está em teste fechado; pede o acesso a quem te convidou.</p>
+  </div>
+
+  <div id="bad" hidden>
+    <p>Este convite não tem um código válido. Pede a quem te convidou para o enviar outra vez.</p>
+  </div>
+</main>
+<script>
+  // O código vem em ?c=K7QF29XX: 8 letras e números sem ambiguidades (sem 0, 1, I, L, O). Nada sai desta página.
+  var raw = (new URLSearchParams(location.search).get('c') || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  var valid = /^[ABCDEFGHJKMNPQRSTUVWXYZ2-9]{8}$/.test(raw);
+  document.getElementById(valid ? 'ok' : 'bad').hidden = false;
+  if (valid) {
+    var pretty = raw.slice(0, 4) + '-' + raw.slice(4);
+    document.getElementById('code').textContent = pretty;
+    document.getElementById('open').href = 'apostoque://join/' + raw;
+    document.getElementById('copy').addEventListener('click', function () {
+      var done = function () { document.getElementById('copied').hidden = false; };
+      if (navigator.clipboard) navigator.clipboard.writeText(pretty).then(done, done); else done();
+    });
+  }
+</script>
+</body>
+</html>
